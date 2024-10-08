@@ -18,13 +18,43 @@ class Grass:
 class Boy:
     def __init__(self):
         self.x, self.y = random.randint(100, 700), 90
-        self.frame = 0
+        self.frame =  random.randint(0, 7)
         self.image = load_image('run_animation.png')
     def update(self):
-        self.frame =  random.randint(0, 7)
+
+        self.frame = (self.frame + 1) % 8
         self.x += 5
     def draw(self):
         self.image.clip_draw(self.frame*100, 0, 100, 100, self.x, self.y)
+
+ball_count = 0
+class Ball:
+    def __init__(self):
+        global ball_count
+        self.x, self.y = random.randint(100, 700), 599
+        self.dy = ball_count + 5
+        self.size = random.randint(0,2)
+        if self.size:
+            self.image = load_image('ball21x21.png')
+        else:
+            self.image = load_image('ball41x41.png')
+        ball_count += 1
+
+    def draw(self):
+        self.image.draw(self.x, self.y)
+
+    def update(self):
+        if self.size == 0:
+            if self.y - self.dy > 60:
+              self.y -= self.dy
+            else:
+                self.y = 60
+        else:
+            if self.y - self.dy> 50:
+              self.y -= self.dy
+            else:
+                self.y = 50
+
 
 
 def handle_events():
@@ -41,13 +71,16 @@ def reset_world():
     global grass
     global team
     global world
+    global balls
 
     running = True
     world = []
     grass = Grass() # 잔디 생성
     world.append(grass)
     team = [Boy() for i in range(10)]
+    balls = [Ball() for i in range(20)]
     world += team
+    world += balls
 
 def update_world():
     for o in world:
