@@ -3,6 +3,16 @@ from fileinput import close
 from pico2d import *
 
 # Game object class here
+class Grass:
+    def __init__(self):
+        # 모양없는 납작한 붕어빵의 초기모습결정
+        self.image = load_image('grass.png')
+
+    def draw(self):
+        self.image.draw(400,30)
+
+    def update(self):
+        pass
 
 def handle_events():
     global running
@@ -15,14 +25,18 @@ def handle_events():
 
 def reset_world():
     global running
+    global grass
 
     running = True
+    grass = Grass() # 잔디 생성
+
 
 def update_world():
-    pass
+    grass.update() # 객체 상태 업데이트
 
 def render_world():
     clear_canvas()
+    grass.draw()
     update_world()
 
 
